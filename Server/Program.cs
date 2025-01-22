@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using Server.DAL.Models;
+
 namespace Server
 {
     public class Program
@@ -13,6 +16,11 @@ namespace Server
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<ServerDbContext>(options =>
+            {
+                options.UseMySQL(builder.Configuration.GetConnectionString("Default") ?? "");
+            });
 
             var app = builder.Build();
 

@@ -2,13 +2,10 @@
 
 namespace Server.Services
 {
-    [Route("api/[controller]")]
+    [Route("/user")]
     [ApiController]
     public class UserService : ControllerBase
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+
     }
 }

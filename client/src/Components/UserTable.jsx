@@ -91,6 +91,7 @@ const UserTable = () => {
 
   return (
     <Box sx={{ height: "auto", width: "100%", p: 3, bgcolor: "#f9f9f9", borderRadius: 2, boxShadow: 1 }}>
+      <Button>Logout</Button>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Box>
           <Button

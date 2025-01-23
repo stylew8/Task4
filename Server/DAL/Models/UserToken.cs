@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.DAL.Models;
 
+[Index(nameof(UserTokenId))]
 public class UserToken
 {
     [Key]

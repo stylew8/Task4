@@ -7,5 +7,5 @@ public class AppUser : Entity
 {
     public required string Email { get; set; }
     public required string Password { get; set; }
-    public required string Salt { get; set; }
+    public required Guid Salt { get; set; }
 }

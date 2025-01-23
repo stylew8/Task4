@@ -1,6 +1,12 @@
 
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Server.BL;
+using Server.BL.Interfaces;
+using Server.DAL;
+using Server.DAL.Interfaces;
 using Server.DAL.Models;
+using Server.Infastructure;
 
 namespace Server
 {
@@ -11,6 +17,15 @@ namespace Server
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddLogging();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddSingleton<IEncrypt, Pbkdf2Encryptor>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -22,7 +37,20 @@ namespace Server
                 options.UseMySQL(builder.Configuration.GetConnectionString("Default") ?? "");
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000", "https://uniqum.school")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
+
             var app = builder.Build();
+
+            app.UseCors();
 
             if (app.Environment.IsDevelopment())
             {
@@ -32,6 +60,8 @@ namespace Server
 
             app.UseHttpsRedirection();
 
+            app.UseExceptionHandler();
+
             app.UseAuthorization();
 
 
@@ -39,5 +69,6 @@ namespace Server
 
             app.Run();
         }
-    }
+    
+}
 }

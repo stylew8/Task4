@@ -4,7 +4,7 @@ namespace Server.Services
 {
     [Route("/user")]
     [ApiController]
-    public class UserService : ControllerBase
+    public class UserController : ControllerBase
     {
 
     }

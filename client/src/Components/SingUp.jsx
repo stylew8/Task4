@@ -3,15 +3,19 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import SignInPage from "./SignIn";
+import { postWithoutAuth } from "../utils/api";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setError("");
 
     if (password !== confirmPassword) {
@@ -22,11 +26,9 @@ const RegisterPage = () => {
     setIsLoading(true);
 
     try {
-      // Simulating an API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const data = await postWithoutAuth("auth/register", { name, surname, email, password})
 
-      // Here you would typically call your registration API
-      alert("Registration successful!");
+      alert(data);
     } catch (err) {
       setError("Registration failed. Please try again.");
     } finally {
@@ -40,8 +42,36 @@ const RegisterPage = () => {
         <div className="col-md-6">
           <div className="card">
             <div className="card-body">
-              <h2 className="card-title text-center mb-4">Register</h2>
+              <h2 className="card-title text-center mb-4">Registration</h2>
               <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="name" className="form-label">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="surname" className="form-label">
+                    Surname
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="surname"
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">
                     Email address

@@ -8,36 +8,36 @@ import TextField from "@mui/material/TextField";
 
 const UserTable = () => {
 
-    const rows = [
-        {
-          id: 1,
-          name: "Clare, Alex",
-          email: "a_clare42@gmail.com",
-          lastSeen: "5 minutes ago",
-          status: "active",
-        },
-        {
-          id: 2,
-          name: "Morrison, Jim",
-          email: "dmtimer9@dealyaari.com",
-          lastSeen: "less than a minute ago",
-          status: "active",
-        },
-        {
-          id: 3,
-          name: "Simone, Nina",
-          email: "marishabelin@giftcode-ao.com",
-          lastSeen: "3 weeks ago",
-          status: "blocked",
-        },
-        {
-          id: 4,
-          name: "Zappa, Frank",
-          email: "zappa_f@citybank.com",
-          lastSeen: "less than a minute ago",
-          status: "blocked",
-        },
-      ];
+  const rows = [
+    {
+      id: 1,
+      name: "Clare, Alex",
+      email: "a_clare42@gmail.com",
+      lastSeen: "5 minutes ago",
+      status: "active",
+    },
+    {
+      id: 2,
+      name: "Morrison, Jim",
+      email: "dmtimer9@dealyaari.com",
+      lastSeen: "less than a minute ago",
+      status: "active",
+    },
+    {
+      id: 3,
+      name: "Simone, Nina",
+      email: "marishabelin@giftcode-ao.com",
+      lastSeen: "3 weeks ago",
+      status: "blocked",
+    },
+    {
+      id: 4,
+      name: "Zappa, Frank",
+      email: "zappa_f@citybank.com",
+      lastSeen: "less than a minute ago",
+      status: "blocked",
+    },
+  ];
 
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -62,7 +62,6 @@ const UserTable = () => {
     {
       field: "status",
       headerName: "Status",
-      flex: 1,
       renderCell: (params) => (
         <span style={{ color: params.value === "blocked" ? "red" : "green" }}>
           {params.value}
@@ -90,9 +89,13 @@ const UserTable = () => {
   };
 
   return (
-    <Box sx={{ height: "auto", width: "100%", p: 3, bgcolor: "#f9f9f9", borderRadius: 2, boxShadow: 1 }}>
-      <Button>Logout</Button>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+    <Box sx={{ height: "auto", width: "100%", bgcolor: "#f9f9f9", borderRadius: 2, boxShadow: 1 }}>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "5px", padding:"2px"}}>
+        <Button 
+          color="error"
+        >Logout</Button>
+      </div>
+      <Box sx={{ display: "flex", justifyContent: "space-between",p:"2px" }}>
         <Box>
           <Button
             variant="contained"

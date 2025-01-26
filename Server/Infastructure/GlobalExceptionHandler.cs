@@ -110,24 +110,24 @@ public class GlobalExceptionHandler : IExceptionHandler
                 }
             }
         }
-        else
-        {
-            logger.LogError($"Unexpected exception: {exception.Message}");
+        // else
+        // {
+        //     logger.LogError($"Unexpected exception: {exception.Message}");
+        //
+        //     httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        //
+        //     return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
+        //     {
+        //         HttpContext = httpContext,
+        //         ProblemDetails = new ProblemDetails()
+        //         {
+        //             Status = (int)HttpStatusCode.BadRequest,
+        //             Title = "Problems with api",
+        //             Detail = "Now we have some problems with api. Try again later.."
+        //         }
+        //     });
+        // }
 
-            httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-            return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
-            {
-                HttpContext = httpContext,
-                ProblemDetails = new ProblemDetails()
-                {
-                    Status = (int)HttpStatusCode.BadRequest,
-                    Title = "Problems with api",
-                    Detail = "Now we have some problems with api. Try again later.."
-                }
-            });
-        }
-
-        return true;
+        return false;
     }
 }

@@ -16,6 +16,16 @@ namespace Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(8080);
+                options.ListenAnyIP(7156, listenOptions =>
+                {
+                    listenOptions.UseHttps("/app/ssl/cert.pem", "/app/ssl/cert.key");  // Пути к сертификатам, которые монтируются в контейнер
+                });
+            });
+
+
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
             builder.Logging.SetMinimumLevel(LogLevel.Warning);

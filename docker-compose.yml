@@ -22,6 +22,7 @@ services:
       - "7156:7156"
     volumes:
       - ./Server:/app
+      - ./nginx/ssl:/app/ssl 
     environment:
       ASPNETCORE_ENVIRONMENT: Development
 

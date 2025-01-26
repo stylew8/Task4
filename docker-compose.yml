@@ -20,8 +20,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./server:/app
-      - /app/node_modules
+      - ./Server:/app
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - DOTNET_USE_POLLING_FILE_WATCHER=1

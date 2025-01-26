@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BL\Models\" />
     <Folder Include="DAL\Interfaces\" />
   </ItemGroup>
 

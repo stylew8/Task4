@@ -13,22 +13,19 @@ const ProtectedRoute = ({ children, requireAuth }) => {
 
         if (sessionId !== null) {
             try {
-                const response = await postWithAuth("auth/validate/session", "", sessionId);
+                const response = await postWithAuth("auth/validation/session", "", sessionId);
                 setIsAuthenticated(true); 
             } catch (error) {
                 setIsAuthenticated(false); 
             }
         } else {
-            console.warn("SessionId not found. Falling back to RememberMe token...");
-
             if (rememberMe != null) {
                 try {
-                    const response2 = await postWithoutAuth("auth/validate/userToken", { userToken: rememberMe });
+                    const response2 = await postWithoutAuth("auth/validation/userToken", { userToken: rememberMe });
 
                     setCookie("SessionId", response2.data.sessionId);
                     setIsAuthenticated(true);
                 } catch (error) {
-                    console.error("Error validating RememberMe token:", error);
                     setIsAuthenticated(false);
                 }
             } else {

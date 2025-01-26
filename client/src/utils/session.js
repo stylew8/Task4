@@ -14,7 +14,6 @@ export const getCookie = (name) => {
     try {
         const value = Cookies.get(name); 
         if (!value) {
-            console.warn(`Cookie "${name}" not found.`);
             return null;
         }
 
@@ -22,14 +21,12 @@ export const getCookie = (name) => {
             try {
                 return JSON.parse(value);
             } catch (jsonError) {
-                console.error(`Error parsing cookie "${name}":`, jsonError);
                 return null;
             }
         }
 
         return value;
     } catch (error) {
-        console.error(`Error retrieving cookie "${name}":`, error);
         return null;
     }
 };
@@ -38,7 +35,6 @@ export const deleteCookie = (name) => {
     if (Cookies.get(name)) {
         Cookies.remove(name);
     } else {
-        console.warn(`Cookie with name: "${name}" not exsists.`);
     }
 };
 

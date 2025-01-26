@@ -21,14 +21,14 @@ namespace Server.Services
         [Route("register")]
         public async Task<IActionResult> Registration(RegisterRequest request)
         {
-            int userId = await authService.Registration(
+            int userId = await authService.RegistrationAsync(
                 string.Concat(request.Name, " ", request.Surname),
                 request.Email,
                 request.Password);
 
             var sessionInfo = authService.GetSessionInformation(HttpContext);
 
-            var sessionId = await authService.CreateSession(
+            var sessionId = await authService.CreateSessionAsync(
                 sessionInfo.IpAddress,
                 sessionInfo.UserAgent,
                 userId);
@@ -42,7 +42,7 @@ namespace Server.Services
         {
             var sessionInfo = authService.GetSessionInformation(HttpContext);
 
-            var response = await authService.Authorization(
+            var response = await authService.AuthorizationAsync(
                 request.Email,
                 request.Password,
                 request.RememberMe,
@@ -54,24 +54,36 @@ namespace Server.Services
 
         [AuthTokenRequired]
         [HttpPost]
-        [Route("validate/session")]
+        [Route("validation/session")]
         public async Task<IActionResult> ValidateSession()
         {
             return Ok();
         }
 
         [HttpPost]
-        [Route("validate/userToken")]
+        [Route("validation/userToken")]
         public async Task<IActionResult> ValidateUserToken(UserTokenRequest request)
         {
             var sessionInfo = authService.GetSessionInformation(HttpContext);
 
             Guid sessionId =
-                await authService.CheckUserToken(request.userToken, sessionInfo.UserAgent, sessionInfo.IpAddress);
+                await authService.CheckUserTokenAsync(request.userToken, sessionInfo.UserAgent, sessionInfo.IpAddress);
 
             return Ok(new UserTokenResponse(sessionId));
         }
+
+        [AuthTokenRequired]
+        [HttpDelete]
+        [Route("logout")]
+        public async Task<IActionResult> Logout(LogoutRequest request)
+        {
+            await authService.LogoutAsync(request.sessionId, request.rememberMe);
+
+            return Ok();
+        }
     }
+
+    public record LogoutRequest(Guid sessionId, Guid? rememberMe);
 
     public record UserTokenRequest(Guid userToken);
 

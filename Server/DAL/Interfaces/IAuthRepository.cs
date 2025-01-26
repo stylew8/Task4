@@ -4,7 +4,9 @@ namespace Server.DAL.Interfaces;
 
 public interface IAuthRepository
 {
-    Task CreateSession(DbSession session);
-    Task CreateUserToken(UserToken userToken);
-    Task<bool> IsSessionValid(Guid sessionId);
+    Task CreateSessionAsync(DbSession session);
+    Task CreateUserTokenAsync(UserToken userToken);
+    Task<bool> IsSessionValidAsync(Guid sessionId);
+    Task DeleteSessionAsync(Guid sessionId);
+    Task DeleteUserTokenAsync(Guid userToken);
 }

@@ -15,7 +15,7 @@ public class AuthTokenRequired : Attribute, IAsyncAuthorizationFilter
 
         if (service == null)
         {
-            context.Result = new StatusCodeResult(500); // Internal Server Error
+            context.Result = new StatusCodeResult(500);
             return;
         }
 
@@ -33,7 +33,7 @@ public class AuthTokenRequired : Attribute, IAsyncAuthorizationFilter
             return;
         }
 
-        if (!Guid.TryParse(token, out Guid session) || !await service.ValidateToken(session))
+        if (!Guid.TryParse(token, out Guid session) || !await service.ValidateTokenAsync(session))
         {
             context.Result = new UnauthorizedObjectResult("Authorization session is not valid");
             return;

@@ -110,7 +110,8 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -137,7 +138,8 @@ namespace Server.Migrations
                 {
                     b.HasOne("Server.DAL.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("User");
                 });
@@ -145,8 +147,8 @@ namespace Server.Migrations
             modelBuilder.Entity("Server.DAL.Models.User", b =>
                 {
                     b.HasOne("Server.DAL.Models.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
+                        .WithOne()
+                        .HasForeignKey("Server.DAL.Models.User", "AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

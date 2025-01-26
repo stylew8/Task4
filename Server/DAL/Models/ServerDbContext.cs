@@ -12,4 +12,5 @@ public class ServerDbContext : DbContext
     public DbSet<DbSession> DbSession { get; set; }
     public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<UserToken> UserTokens { get; set; }
+
 }

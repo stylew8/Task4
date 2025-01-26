@@ -39,7 +39,7 @@ public class AuthService : IAuthService
         };
     }
 
-    public async Task<int> Registration(string fullName, string email, string password)
+    public async Task<int> RegistrationAsync(string fullName, string email, string password)
     {
         Guid salt = Guid.NewGuid();
 
@@ -48,7 +48,7 @@ public class AuthService : IAuthService
         logger.LogInformation("Password was hashed successfully");
 
         logger.LogInformation("Creating appUser for registration");
-        int appUserId = await userRepository.CreateAppUser(new AppUser()
+        int appUserId = await userRepository.CreateAppUserAsync(new AppUser()
         {
             Email = email,
             Password = hashedPassword,
@@ -57,7 +57,7 @@ public class AuthService : IAuthService
         logger.LogInformation("AppUser was created successfully");
 
         logger.LogInformation("Creating User in database");
-        int userId = await userRepository.CreateUser(new User()
+        int userId = await userRepository.CreateUserAsync(new User()
         {
             AppUserId = appUserId,
             FullName = fullName,
@@ -69,12 +69,12 @@ public class AuthService : IAuthService
         return userId;
     }
 
-    public async Task<Guid> CreateSession(string ipAddress, string device, int? userId)
+    public async Task<Guid> CreateSessionAsync(string ipAddress, string device, int? userId)
     {
         Guid sessionId = Guid.NewGuid();
 
         logger.LogInformation("Creating Session in database");
-        await authRepository.CreateSession(new DbSession()
+        await authRepository.CreateSessionAsync(new DbSession()
         {
             IpAddress = ipAddress,
             UserId = userId,
@@ -86,10 +86,10 @@ public class AuthService : IAuthService
         return sessionId;
     }
 
-    public async Task<LoginResponse> Authorization(string email, string password, bool rememberMe, string device, string ipAddress)
+    public async Task<LoginResponse> AuthorizationAsync(string email, string password, bool rememberMe, string device, string ipAddress)
     {
         logger.LogInformation("Try to get appUser by email");
-        AppUser? appUser = await userRepository.GetAppUser(email);
+        AppUser? appUser = await userRepository.GetAppUserAsync(email);
 
         if (appUser == null)
         {
@@ -110,7 +110,7 @@ public class AuthService : IAuthService
         logger.LogInformation("Successfully hashed password");
 
         logger.LogInformation("Try to get userId ");
-        int? userId = await userRepository.GetUserId(appUser.Id);
+        int? userId = await userRepository.GetUserIdAsync(appUser.Id);
 
         if (userId == null)
         {
@@ -123,7 +123,7 @@ public class AuthService : IAuthService
 
 
         logger.LogInformation("Creating Session for new login");
-        await authRepository.CreateSession(new DbSession()
+        await authRepository.CreateSessionAsync(new DbSession()
         {
             UserId = userId,
             SessionId = session,
@@ -140,7 +140,7 @@ public class AuthService : IAuthService
             logger.LogInformation("RememberMe was true, creating new userToken");
             rememberMeValue = Guid.NewGuid();
 
-            await authRepository.CreateUserToken(new UserToken()
+            await authRepository.CreateUserTokenAsync(new UserToken()
             {
                 UserId = (int)userId,
                 UserTokenId = (Guid)rememberMeValue
@@ -152,24 +152,24 @@ public class AuthService : IAuthService
         return new LoginResponse(session.ToString(), rememberMeValue.ToString());
     }
 
-    public async Task<bool> ValidateToken(Guid sessionId)
+    public async Task<bool> ValidateTokenAsync(Guid sessionId)
     {
         logger.LogInformation("Validating sessionId in database");
-        bool isValid = await authRepository.IsSessionValid(sessionId);
+        bool isValid = await authRepository.IsSessionValidAsync(sessionId);
 
         return isValid;
     }
 
-    public async Task<Guid> CheckUserToken(Guid userTokenId, string device, string ipAddress)
+    public async Task<Guid> CheckUserTokenAsync(Guid userTokenId, string device, string ipAddress)
     {
         logger.LogInformation("Try to find userToken in database");
-        var userToken = await userRepository.GetUserToken(userTokenId);
+        var userToken = await userRepository.GetUserTokenAsync(userTokenId);
 
         Guid sessionId = Guid.NewGuid();
 
         logger.LogInformation("Creating new session in db");
 
-        await authRepository.CreateSession(new DbSession()
+        await authRepository.CreateSessionAsync(new DbSession()
         {
             SessionId = sessionId,
             UserId = userToken.UserId,
@@ -178,5 +178,15 @@ public class AuthService : IAuthService
         });
 
         return sessionId;
+    }
+
+    public async Task LogoutAsync(Guid sessionId, Guid? rememberMe)
+    {
+        await authRepository.DeleteSessionAsync(sessionId);
+
+        if (rememberMe != null)
+        {
+            await authRepository.DeleteUserTokenAsync((Guid)rememberMe);
+        }
     }
 }

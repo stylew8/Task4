@@ -1,6 +1,8 @@
 import  React from "react";
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { setCookie } from "../utils/session";
+import { postWithoutAuth } from "../utils/api";
 
 const SignInPage = () => {
   const [email, setEmail] = useState("");
@@ -10,19 +12,36 @@ const SignInPage = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setError("");
     setIsLoading(true);
 
     try {
-      // Simulating an API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const response = await postWithoutAuth("auth/login", { email, password, rememberMe});
+      
+      if (response.status !== 200 || response.detail || response.title) {
+        throw new Error(response.response.data.detail);
+      }
+      const data = response.data;
+      
 
-      // Here you would typically call your authentication API
-      // For this example, we'll just simulate a failed login
-      throw new Error("Invalid email or password");
+      if(data.sessionId){
+        setCookie("SessionId", data.sessionId);
+      }
+      
+      if(data.rememberMe){
+        setCookie("RememberMe", data.rememberMe, 30);
+      }
+
+      if(data.rememberMe || data.sessionId){
+        window.location.reload();
+      }
+
     } catch (err) {
-      setError("Invalid email or password. Please try again.");
+      if(err.response.data.detail){
+        setError(err.response.data.detail);
+      }
     } finally {
       setIsLoading(false);
     }

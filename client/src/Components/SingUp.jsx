@@ -1,9 +1,8 @@
 import  React from "react";
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
-import SignInPage from "./SignIn";
 import { postWithoutAuth } from "../utils/api";
+import { setCookie } from "../utils/session";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -27,10 +26,10 @@ const RegisterPage = () => {
 
     try {
       const data = await postWithoutAuth("auth/register", { name, surname, email, password})
-
-      alert(data);
+      setCookie("SessionId", data.data.sessionId);
+      window.location.reload();
     } catch (err) {
-      setError("Registration failed. Please try again.");
+      setError(err.response.data.detail || "Some problems, try later...");
     } finally {
       setIsLoading(false);
     }
@@ -140,7 +139,7 @@ const RegisterPage = () => {
               </form>
               <div className="text-center mt-3">
                 <p className="mb-0">
-                  Already have an account? <Link element={<SignInPage/>}>Sign In</Link>
+                  Already have an account? <a href="/login">Sign In</a>
                 </p>
               </div>
             </div>

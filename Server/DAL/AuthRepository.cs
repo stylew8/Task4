@@ -18,4 +18,18 @@ public class AuthRepository : IAuthRepository
 
         await dbContext.SaveChangesAsync();
     }
+
+    public async Task CreateUserToken(UserToken userToken)
+    {
+        await dbContext.UserTokens.AddAsync(userToken);
+
+        await dbContext.SaveChangesAsync();
+    }
+
+    public Task<bool> IsSessionValid(Guid sessionId)
+    {
+        var sessionExists = dbContext.DbSession.Any(s => s.SessionId == sessionId && s.UserId != null);
+
+        return Task.FromResult(sessionExists);
+    }
 }

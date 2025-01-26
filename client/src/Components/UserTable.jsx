@@ -3,6 +3,9 @@ import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { setCookie, getCookie, deleteCookie, hasCookie } from "../utils/session";
+import Constants from "../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 // SWR
 
@@ -42,6 +45,8 @@ const UserTable = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
+
+  const navigate = useNavigate();
 
   const columns = [
     {
@@ -88,11 +93,21 @@ const UserTable = () => {
     setFilteredRows(filtered);
   };
 
+  const handleLogout = () => {
+    // запрос на удаление в базе данных
+
+    deleteCookie("SessionId");
+    deleteCookie("RememberMe");
+
+    window.location.reload();
+  }
+
   return (
     <Box sx={{ height: "auto", width: "100%", bgcolor: "#f9f9f9", borderRadius: 2, boxShadow: 1 }}>
       <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "5px", padding:"2px"}}>
         <Button 
           color="error"
+          onClick={()=>handleLogout()}
         >Logout</Button>
       </div>
       <Box sx={{ display: "flex", justifyContent: "space-between",p:"2px" }}>

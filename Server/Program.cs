@@ -16,6 +16,10 @@ namespace Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+            builder.Logging.SetMinimumLevel(LogLevel.Warning);
+
             // Add services to the container.
             builder.Services.AddLogging();
             builder.Services.AddScoped<IAuthService, AuthService>();

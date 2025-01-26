@@ -1,7 +1,7 @@
 # Базовый образ для выполнения приложения
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 5000
+EXPOSE 5111
 
 # Образ для сборки проекта
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build

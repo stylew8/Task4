@@ -18,7 +18,7 @@ services:
       context: ./Server 
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "5111:5111"
     volumes:
       - ./Server:/app
     environment:

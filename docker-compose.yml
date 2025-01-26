@@ -21,6 +21,8 @@ services:
       - "5000:5000"
     volumes:
       - ./Server:/app
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
 
   nginx:
     image: nginx:stable-alpine

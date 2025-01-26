@@ -15,15 +15,12 @@ services:
 
   server:
     build:
-      context: ./Server
+      context: ./Server 
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
     volumes:
       - ./Server:/app
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
 
   nginx:
     image: nginx:stable-alpine

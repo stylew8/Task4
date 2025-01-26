@@ -71,7 +71,7 @@ namespace Server
 
             app.MapControllers();
 
-            app.Run("http://0.0.0.0:5111");
+            app.Run();
         }
     
 }

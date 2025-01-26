@@ -1,28 +1,22 @@
-# Базовый образ для выполнения приложения
+# Используем базовый образ .NET Runtime для запуска приложения
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 5111
+EXPOSE 8080
+EXPOSE 7156
 
-# Образ для сборки проекта
+# Используем SDK для сборки приложения
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Копируем файл проекта
-COPY ["Server.csproj", "./"]
-
-# Восстанавливаем зависимости
-RUN dotnet restore "Server.csproj"
-
-# Копируем все файлы
+# Копируем файлы проекта и собираем
 COPY . .
-
-# Публикуем проект в папку /app/publish
+RUN dotnet restore "Server.csproj"
 RUN dotnet publish "Server.csproj" -c Release -o /app/publish
 
-# Финальная стадия: минимальный образ
+# Переносим собранное приложение в runtime образ
 FROM base AS final
-WORKDIR /app
+WORKDIR /app/publish
 COPY --from=build /app/publish .
-
-# Указываем точку входа
+CMD ["ls"]
 ENTRYPOINT ["dotnet", "Server.dll"]
+

@@ -15,10 +15,11 @@ services:
 
   server:
     build:
-      context: ./Server 
+      context: ./Server
       dockerfile: Dockerfile
     ports:
-      - "5111:5111"
+      - "8080:8080"
+      - "7156:7156"
     volumes:
       - ./Server:/app
     environment:
@@ -31,7 +32,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/ssl:/etc/nginx/ssl 
+      - ./nginx/ssl:/etc/nginx/ssl
     depends_on:
       - client
       - server

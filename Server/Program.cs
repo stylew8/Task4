@@ -45,7 +45,7 @@ namespace Server
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000", "https://uniqum.school")
+                    policy.WithOrigins("http://localhost:3000", "http://uniqum.school")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });

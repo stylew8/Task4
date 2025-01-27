@@ -26,10 +26,18 @@ const RegisterPage = () => {
 
     try {
       const data = await postWithoutAuth("auth/register", { name, surname, email, password})
-      setCookie("SessionId", data.data.sessionId);
-      window.location.reload();
+
+      if(data){
+        setCookie("SessionId", data.data.sessionId);
+        window.location.reload();
+      }
     } catch (err) {
-      setError(err.response.data.detail || "Some problems, try later...");
+        if(err.response !== undefined){
+          setError(err.response.data.detail || "Some problems, try later...");
+        }
+      else{
+        setError("Some problems. Try later..");
+      }
     } finally {
       setIsLoading(false);
     }

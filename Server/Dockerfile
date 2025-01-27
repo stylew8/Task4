@@ -8,8 +8,6 @@ EXPOSE 7156
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY ./nginx/ssl /app/ssl
-
 # Копируем файлы проекта и собираем
 COPY . .
 RUN dotnet restore "Server.csproj"
@@ -19,8 +17,6 @@ RUN dotnet publish "Server.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app/publish
 COPY --from=build /app/publish .
-
-
 
 # Указываем точку входа
 ENTRYPOINT ["dotnet", "Server.dll"]

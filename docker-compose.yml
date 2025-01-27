@@ -19,18 +19,18 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-      - "7156:7156"
     volumes:
       - ./Server:/app
-      - ./nginx/ssl:/app/ssl 
     environment:
       ASPNETCORE_ENVIRONMENT: Development
 
   nginx:
-    image: nginx:stable-alpine
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     ports:
-      - "80:8080"
-      - "443:7156"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/ssl:/etc/nginx/ssl

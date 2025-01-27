@@ -16,7 +16,7 @@ namespace Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Logging.ClearProviders();
+            //builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
             builder.Logging.SetMinimumLevel(LogLevel.Warning);
 
@@ -45,7 +45,10 @@ namespace Server
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000", "http://uniqum.school")
+                    // policy.WithOrigins("http://localhost:3000", "https://uniqum.school")
+                    //     .AllowAnyHeader()
+                    //     .AllowAnyMethod();
+                    policy.AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -62,7 +65,7 @@ namespace Server
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseExceptionHandler();
 

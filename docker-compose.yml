@@ -22,6 +22,7 @@ services:
     volumes:
       - ./Server:/app
     environment:
+      ASPNETCORE_URLS: "http://+:8080"
       ASPNETCORE_ENVIRONMENT: Development
 
   nginx:
